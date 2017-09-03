@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  db:
+    container_name: thuenha_db
+    image: "postgres:latest"
+    environment:
+        - POSTGRES_USER=docker
+        - POSTGRES_PASSWORD=docker
+        - POSTGRES_DB=docker
+    ports:
+        - "5432:5432"
+    volumes:
+        - ./dbdata:/var/lib/postgresql/data/
+  web:
+    container_name: thuenha_web
+    build:
+      context: ./
+      dockerfile: web.dockerfile
+    command: bash -c "./utils/wait-for-it.sh db:5432 -- python3 manage.py makemigrations && python3 manage.py migrate && gunicorn src.wsgi -b 0.0.0.0:8001"
+    volumes:
+      - .:/code
+    expose:
+      - "8001"
+    depends_on:
+      - "db"
+  nginx:
+    container_name: thuenha_nginx
+    restart: always
+    build:
+      context: ./
+      dockerfile: nginx.dockerfile
+    volumes_from:
+      - web
+    volumes:
+      - ./configs/nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    depends_on:
+      - web
