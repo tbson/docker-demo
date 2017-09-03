@@ -25,7 +25,7 @@ SECRET_KEY = '=79lpattdu=6+o-j3oj7sn=s4g0(g(l9)dqw!_jw9l=bgw*^fb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['web', 'localhost', 'thuenha.dev', 'thuenha1.dev', 'thuenha.pro']
+ALLOWED_HOSTS = ['web', 'localhost', 'thuenha.dev', 'thuenha.pro']
 
 
 # Application definition
